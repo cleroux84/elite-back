@@ -13,7 +13,8 @@ exports.create = (req, res) => {
         content: req.body.content,
         //TODO change
         createdAt: "2022-01-31 00:00:00",
-        updatedAt: "2022-01-31 00:00:00"
+        updatedAt: "2022-01-31 00:00:00",
+        image: req.body.image
     };
 
     Articles.create(articles)
