@@ -2,9 +2,15 @@ module.exports = app => {
     const articles = require("../controllers/tutorial.controller");
     const multer = require("multer");
 
-    const upload = multer({
-        dest: "./uploads/"
-    })
+    const storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, './uploads/')
+        },
+        filename: function(req, file, cb) {
+            cb(null, file.originalname)
+        }
+    });
+    let upload = multer({ storage: storage})
 
     var router = require("express").Router();
 
@@ -21,7 +27,9 @@ module.exports = app => {
     router.delete("/", articles.deleteAll);
 
     app.post('/upload', upload.single("file"), (req, res) => {
-        res.json({ file: req.file})
+        // res.json({ file: req.file})
+        const { filename: file} = req.file
+        res.redirect("/")
     })
 
     app.use('/api/articles', router);

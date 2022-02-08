@@ -1,6 +1,8 @@
 const db = require("../models");
 const Articles = db.articles;
 const Op = db.Sequelize.Op;
+// const Images = require("../../uploads")
+
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
     if(!req.body.title) {
@@ -28,6 +30,11 @@ exports.create = (req, res) => {
             });
         });
 };
+
+// exports.findImage = {
+//     const filePath = Images +
+// }
+
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
     const title = req.query.title;
@@ -40,7 +47,7 @@ exports.findAll = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message:
-                err.message || "Some error occured while retriving articles"
+                err.message || "Some error occured while retrieving articles"
             });
         });
 };
