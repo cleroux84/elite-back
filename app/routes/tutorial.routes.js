@@ -32,7 +32,6 @@ module.exports = app => {
             root: path.join(__dirname, '../../uploads/')
         };
         const fileName = req.params.name;
-        console.log(fileName)
         res.sendFile(fileName, options, function (err) {
             if (err) {next (err)} else {console.log('Sent:', fileName)}
         })
