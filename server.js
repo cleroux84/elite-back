@@ -4,7 +4,7 @@ const cors = require("cors");
 
 const app = express();
 
-var corsOptions = {
+const corsOptions = {
     origin: "http://localhost:8081"
 };
 app.use(cors(corsOptions));
@@ -12,6 +12,7 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use("./uploads", express.static(__dirname + './uploads'));
 
 const db = require("./app/models");
 //drop the table if already exists
@@ -25,10 +26,4 @@ app.get("/", (req, res) => {
 });
 require("./app/routes/tutorial.routes")(app);
 
-// set port, listen for requests
-// const PORT = process.env.PORT || 8080;
-// app.listen(PORT, () => {
-//     console.log(`Server is running on port ${PORT}.`);
-// });
-
-app.listen(8080, () => console.log("Running on 8080"))
+app.listen(8080, () => console.log("Running on 8080 "))

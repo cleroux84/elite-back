@@ -1,7 +1,6 @@
 const db = require("../models");
 const Articles = db.articles;
 const Op = db.Sequelize.Op;
-// const Images = require("../../uploads")
 
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
@@ -31,10 +30,6 @@ exports.create = (req, res) => {
         });
 };
 
-// exports.findImage = {
-//     const filePath = Images +
-// }
-
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
     const title = req.query.title;
@@ -51,6 +46,7 @@ exports.findAll = (req, res) => {
             });
         });
 };
+
 // Find a single Tutorial with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
