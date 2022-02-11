@@ -1,6 +1,5 @@
 const db = require("../models");
 const Articles = db.articles;
-const Op = db.Sequelize.Op;
 
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
@@ -33,9 +32,11 @@ exports.create = (req, res) => {
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
     const title = req.query.title;
-    var condition = title ? { title: { [Op.like]: `%${title}`}} : null;
+    // var condition = title ? { title: { [Op.like]: `%${title}`}} : null;
 
-    Articles.findAll({ where: condition})
+
+
+    Articles.findAll()
         .then(data => {
             res.send(data);
         })

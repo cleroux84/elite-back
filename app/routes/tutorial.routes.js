@@ -1,4 +1,12 @@
 const path = require("path");
+const jwt = require("express-jwt");
+const jwksRsa = require("jwks-rsa");
+//auth0 API
+const authConfig = {
+    domain: "dev-nrug8pbx.us.auth0.com",
+    audience: "https://elite-coaching-api.com"
+};
+
 module.exports = app => {
     const articles = require("../controllers/tutorial.controller");
     const multer = require("multer");
@@ -11,21 +19,36 @@ module.exports = app => {
             cb(null, file.originalname)
         }
     });
+
+    const checkJwt = jwt({
+        // Provide a signing key based on the key identifier in the header and the signing keys provided by your Auth0 JWKS endpoint.
+        secret: jwksRsa.expressJwtSecret({
+            cache: true,
+            rateLimit: true,
+            jwksRequestsPerMinute: 5,
+            jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`
+        }),
+
+        // Validate the audience (Identifier) and the issuer (Domain).
+        audience: authConfig.audience,
+        issuer: `https://${authConfig.domain}/`,
+        algorithms: ["RS256"]
+    });
     let upload = multer({ storage: storage})
 
     var router = require("express").Router();
 
     router.post("/", articles.create);
 
-    router.get("/", articles.findAll);
+    router.get("/",  articles.findAll);
 
     router.get("/:id", articles.findOne);
 
-    router.put("/:id", articles.update);
+    router.put("/:id", checkJwt, articles.update);
 
-    router.delete("/:id", articles.delete);
+    router.delete("/:id", checkJwt, articles.delete);
 
-    router.delete("/", articles.deleteAll);
+    router.delete("/", checkJwt, articles.deleteAll);
 
     app.get('/file/:name', function (req, res, next) {
         const options = {
