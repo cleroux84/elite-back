@@ -9,7 +9,8 @@ const authConfig = {
 
 module.exports = app => {
     const articles = require("../controllers/tutorial.controller");
-    const admin = require('../controllers/admin.controller')
+    const admin = require('../controllers/admin.controller');
+    const appointment = require('../controllers/appointment.controller');
     const multer = require("multer");
 
     const storage = multer.diskStorage({
@@ -38,21 +39,20 @@ module.exports = app => {
     let upload = multer({ storage: storage})
 
     // var router = require("express").Router();
-
+//CRUD Articles
     app.post("/api/articles", articles.create);
-
     app.get("/api/articles",  articles.findAll);
-
     app.get("/api/articles/:id", articles.findOne);
-
     app.put("/api/articles/:id", checkJwt, articles.update);
-
     app.delete("/api/articles/:id", checkJwt, articles.delete);
-
     app.delete("/api/articles/", checkJwt, articles.deleteAll);
-
+//envoi des admin
     app.get('/api/admin', checkJwt, admin.findAll)
 
+//CRUD appointments
+    app.get("/api/appointment", appointment.findAll)
+
+//gestion des images
     app.get('/file/:name', function (req, res, next) {
         const options = {
             root: path.join(__dirname, '../../uploads/')
