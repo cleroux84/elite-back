@@ -47,10 +47,13 @@ module.exports = app => {
     app.delete("/api/articles/:id", checkJwt, articles.delete);
     app.delete("/api/articles/", checkJwt, articles.deleteAll);
 //envoi des admin
-    app.get('/api/admin', checkJwt, admin.findAll)
+    app.get('/api/admin', checkJwt, admin.findAll);
 
 //CRUD appointments
-    app.get("/api/appointment", appointment.findAll)
+    app.get("/api/appointment", appointment.findAll);
+    app.get("/api/appointment/:id", /*checkJwt,*/ appointment.findOne);
+    app.post("api/appointment", appointment.create);
+    app.delete("/api/appointment/:id", appointment.delete)
 
 //gestion des images
     app.get('/file/:name', function (req, res, next) {

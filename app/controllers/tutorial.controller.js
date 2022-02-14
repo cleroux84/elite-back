@@ -8,15 +8,14 @@ exports.create = (req, res) => {
             message: "content can not be empty!"
         });
     }
-    const articles = {
+    const article = {
         title: req.body.title,
         content: req.body.content,
-        //TODO change
         createdAt: req.body.createdAt,
         image: req.body.image
     };
 
-    Articles.create(articles)
+    Articles.create(article)
         .then(data => {
             res.send(data);
         })
