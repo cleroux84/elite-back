@@ -1,5 +1,5 @@
-const db = require("../models");
-const Articles = db.articles;
+const Articles = require("../models").articles;
+// const Articles = db.articles;
 
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
@@ -73,10 +73,6 @@ exports.update = (req, res) => {
             if(num === 1) {
                 res.send({
                     message : "Article was updated successfully."
-                });
-            } else {
-                res.send({
-                    message: `Cannot update Article with id = ${id}.`
                 });
             }
         })

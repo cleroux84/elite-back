@@ -9,6 +9,7 @@ const authConfig = {
 
 module.exports = app => {
     const articles = require("../controllers/tutorial.controller");
+    const admin = require('../controllers/admin.controller')
     const multer = require("multer");
 
     const storage = multer.diskStorage({
@@ -36,19 +37,21 @@ module.exports = app => {
     });
     let upload = multer({ storage: storage})
 
-    var router = require("express").Router();
+    // var router = require("express").Router();
 
-    router.post("/", articles.create);
+    app.post("/api/articles", articles.create);
 
-    router.get("/",  articles.findAll);
+    app.get("/api/articles",  articles.findAll);
 
-    router.get("/:id", articles.findOne);
+    app.get("/api/articles/:id", articles.findOne);
 
-    router.put("/:id", checkJwt, articles.update);
+    app.put("/api/articles/:id", checkJwt, articles.update);
 
-    router.delete("/:id", checkJwt, articles.delete);
+    app.delete("/api/articles/:id", checkJwt, articles.delete);
 
-    router.delete("/", checkJwt, articles.deleteAll);
+    app.delete("/api/articles/", checkJwt, articles.deleteAll);
+
+    app.get('/api/admin', checkJwt, admin.findAll)
 
     app.get('/file/:name', function (req, res, next) {
         const options = {
@@ -61,9 +64,10 @@ module.exports = app => {
     })
 
     app.post('/upload', upload.single("file"), (req, res) => {
+        console.log(req.file)
         const { filename: file} = req.file
         res.redirect("/")
     })
 
-    app.use('/api/articles', router);
+    // app.use('/api/articles', router);
 }
