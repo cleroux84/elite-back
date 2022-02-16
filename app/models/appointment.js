@@ -1,22 +1,22 @@
 module.exports = (sequelize, Sequelize) => {
     return sequelize.define('appointments', {
-        firstName: {
+        firstname: {
             type: Sequelize.STRING
         },
-        lastName: {
+        lastname: {
             type: Sequelize.STRING
         },
         name: {
           type: Sequelize.VIRTUAL,
           get() {
-              const firstName = this.getDataValue('firstName');
-              const lastName = this.getDataValue('lastName')
-              return [firstName, lastName].join(' ').trim();
+              const firstname = this.getDataValue('firstname');
+              const lastname = this.getDataValue('lastname')
+              return [firstname, lastname].join(' ').trim();
           }
         },
-        status: {
-          type: Sequelize.BOOLEAN
-        },
+        // status: {
+        //   type: Sequelize.BOOLEAN
+        // },
         email: {
             type: Sequelize.STRING
         },

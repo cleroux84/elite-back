@@ -14,7 +14,7 @@ exports.create = (req, res) => {
         createdAt: req.body.createdAt,
         image: req.body.image
     };
-
+console.log(req.body)
     Articles.create(article)
         .then(data => {
             res.send(data);

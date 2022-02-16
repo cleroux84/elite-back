@@ -1,5 +1,36 @@
 const Appointments = require("../models").appointments;
 
+exports.create = (req, res) => {
+    if (!req.body.firstname) {
+        res.status(400).send({
+            message: "firstname can not be empty!"
+        });
+    }
+    const event = {
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        email: req.body.email,
+        phone: req.body.phone,
+        start: new Date(req.body.start),
+        end: new Date(req.body.end),
+        comment: req.body.comment,
+        createdAt: Date.now(),
+        // status: null
+    }
+
+    console.log(req.body)
+    Appointments.create(event)
+        .then(data => {
+            res.send(data)
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occured while creating the event."
+            });
+        });
+}
+
 exports.findAll = (req, res) => {
 
     Appointments.findAll()
@@ -28,35 +59,6 @@ exports.findOne = (req, res) => {
         });
 };
 
-exports.create = (req, res) => {
-    // if(!req.body.title) {
-    //     res.status(400).send({
-    //         message: "content can not be empty!"
-    //     });
-    // }
-    const appointment = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        phone: req.body.phone,
-        start: req.body.start,
-        end: req.body.end,
-        comment: req.body.comment,
-        createdAt: req.body.createdAt
-    };
-
-    Appointments.create(appointment)
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occured while creating the event."
-            });
-        });
-};
-
 exports.delete = (req, res) => {
     const id = req.params.id;
     Appointments.destroy({
@@ -76,6 +78,27 @@ exports.delete = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message: "Could not delete Event with id=" +id
+            });
+        });
+}
+
+exports.update = (req, res) => {
+    const id = req.params.id;
+    console.log(req.body)
+
+    Appointments.update(req.body, {
+        where: {id: id}
+    })
+        .then(num => {
+            if(num === 1) {
+                res.send({
+                    message : "Event was updated successfully."
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error updating Event with Id=" + id
             });
         });
 }
