@@ -52,7 +52,7 @@ module.exports = app => {
 //CRUD appointments
     app.post("/api/appointment", appointment.create)
     app.get("/api/appointment", appointment.findAll);
-    app.get("/api/appointment/:id", checkJwt, appointment.findOne);
+    // app.get("/api/appointment/:id", checkJwt, appointment.findOne);
     app.delete("/api/appointment/:id", checkJwt, appointment.delete);
     app.put("/api/appointment/:id",checkJwt, appointment.update);
 
