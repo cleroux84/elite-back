@@ -14,7 +14,6 @@ exports.create = (req, res) => {
         createdAt: req.body.createdAt,
         image: req.body.image
     };
-console.log(req.body)
     Articles.create(article)
         .then(data => {
             res.send(data);
@@ -68,11 +67,9 @@ exports.update = (req, res) => {
         where: {id: id}
     })
         .then(num => {
-            if(num === 1) {
                 res.send({
                     message : "Article was updated successfully."
                 });
-            }
         })
         .catch(err => {
             res.status(500).send({

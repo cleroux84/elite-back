@@ -15,10 +15,9 @@ exports.create = (req, res) => {
         end: new Date(req.body.end),
         comment: req.body.comment,
         createdAt: Date.now(),
-        // status: null
+        status: req.body.status
     }
 
-    console.log(req.body)
     Appointments.create(event)
         .then(data => {
             res.send(data)
@@ -84,17 +83,13 @@ exports.delete = (req, res) => {
 
 exports.update = (req, res) => {
     const id = req.params.id;
-    console.log(req.body)
-
     Appointments.update(req.body, {
         where: {id: id}
     })
         .then(num => {
-            if(num === 1) {
                 res.send({
                     message : "Event was updated successfully."
                 });
-            }
         })
         .catch(err => {
             res.status(500).send({

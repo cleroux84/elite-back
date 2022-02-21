@@ -14,9 +14,9 @@ module.exports = (sequelize, Sequelize) => {
               return [firstname, lastname].join(' ').trim();
           }
         },
-        // status: {
-        //   type: Sequelize.BOOLEAN
-        // },
+        status: {
+          type: Sequelize.BOOLEAN
+        },
         email: {
             type: Sequelize.STRING
         },

@@ -54,7 +54,7 @@ module.exports = app => {
     app.get("/api/appointment", appointment.findAll);
     app.get("/api/appointment/:id", /*checkJwt,*/ appointment.findOne);
     app.delete("/api/appointment/:id", appointment.delete);
-    app.put("/api/appointment/:id", appointment.update);
+    app.put("/api/appointment/:id",checkJwt, appointment.update);
 
 //gestion des images
     app.get('/file/:name', function (req, res, next) {
