@@ -11,8 +11,7 @@ module.exports = {
         idle: 10000
     },
 };
-/*
-module.exports = {
+/*module.exports = {
     HOST: "127.0.0.1",
     USER: "root",
     PASSWORD: "Sasha",
