@@ -13,7 +13,7 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use("./uploads", express.static(__dirname + './uploads'));
+app.use("./uploads", express.static(__dirname + './uploads'));
 
 const db = require("./app/models");
 //drop the table if already exists
