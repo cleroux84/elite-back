@@ -68,12 +68,14 @@ module.exports = app => {
     })
 
     const { cloudinary } = require('utils/cloudinary');
-    app.post('/upload', upload.single("file"),(req, res) => {
+    app.post('/upload', async (req, res) => {
         try {
             const filestr = req.file;
-            cloudinary.uploader.upload(filestr).then(x => {
-                console.log(x)
-            })
+            const uploadedResponse = await cloudinary.uploader.upload(filestr, {
+                upload_preset: 'dev_setups'
+            });
+            console.log(uploadedResponse);
+            res.json({msg: "ouppa"})
             res.redirect("/")
         } catch (error) {
             console.error(error)
