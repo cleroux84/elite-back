@@ -11,16 +11,16 @@ module.exports = app => {
     const articles = require("../controllers/tutorial.controller");
     const admin = require('../controllers/admin.controller');
     const appointment = require('../controllers/appointment.controller');
-    // const multer = require("multer");
+    const multer = require("multer");
 
-   /* const storage = multer.diskStorage({
+    const storage = multer.diskStorage({
         destination: function (req, file, cb) {
             cb(null, './uploads/')
         },
         filename: function(req, file, cb) {
             cb(null, file.originalname)
         }
-    });*/
+    });
 
     const checkJwt = jwt({
         // Provide a signing key based on the key identifier in the header and the signing keys provided by your Auth0 JWKS endpoint.
@@ -36,7 +36,7 @@ module.exports = app => {
         issuer: `https://${authConfig.domain}/`,
         algorithms: ["RS256"]
     });
-    // let upload = multer({ storage: storage})
+    let upload = multer({ storage: storage})
 
     // var router = require("express").Router();
 //CRUD Articles
@@ -67,13 +67,11 @@ module.exports = app => {
         })
     })
 
-
-
-    /*app.post('/upload', upload.single("file"), (req, res) => {
+    app.post('/upload', upload.single("file"), (req, res) => {
         console.log(req.file)
         const { filename: file} = req.file
         res.redirect("/")
-    })*/
+    })
 
     // app.use('/api/articles', router);
 }
