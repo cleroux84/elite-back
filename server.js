@@ -1,19 +1,22 @@
 const express = require("express");
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 const cors = require("cors");
-
 const app = express();
 
 const corsOptions = {
     // origin: "http://localhost:8081"
     origin: "https://preprodelitecoaching42.herokuapp.com"
 };
+
+app.use(express.static('public'));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors(corsOptions));
 // parse requests of content-type - application/json
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use("./uploads", express.static(__dirname + './uploads'));
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use("./uploads", express.static(__dirname + './uploads'));
 
 const db = require("./app/models");
 //drop the table if already exists
