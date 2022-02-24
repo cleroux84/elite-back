@@ -67,26 +67,11 @@ module.exports = app => {
         })
     })
 
-    const { cloudinary } = require('utils/cloudinary');
-    app.post('/upload', async (req, res) => {
-        try {
-            const filestr = req.file;
-            const uploadedResponse = await cloudinary.uploader.upload(filestr, {
-                upload_preset: 'dev_setups'
-            });
-            console.log(uploadedResponse);
-            res.json({msg: "ouppa"})
-            res.redirect("/")
-        } catch (error) {
-            console.error(error)
-        }
-    })
-
-   /* app.post('/upload', upload.single("file"), (req, res) => {
+    app.post('/upload', upload.single("file"), (req, res) => {
         console.log(req.file)
         const { filename: file} = req.file
         res.redirect("/")
-    })*/
+    })
 
     // app.use('/api/articles', router);
 }
