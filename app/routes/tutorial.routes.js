@@ -67,20 +67,7 @@ module.exports = app => {
         })
     })
 
-    const { cloudinary } = require('utils/cloudinary.js');
-    app.post('/upload', async (req, res) => {
-        try {
-            const fileStr = req.body.data;
-            const uploadResponse = await cloudinary.uploader.upload(fileStr, {
-                upload_preset: 'dev_setups',
-            });
-            console.log(uploadResponse);
-            res.json({ msg: 'yaya' });
-        } catch (err) {
-            console.error(err);
-            res.status(500).json({ err: 'Something went wrong' });
-        }
-    });
+
 
     /*app.post('/upload', upload.single("file"), (req, res) => {
         console.log(req.file)

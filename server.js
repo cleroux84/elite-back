@@ -28,6 +28,22 @@ const db = require("./app/models");
 app.get("/", (req, res) => {
     res.json({ message: "Welcome to cleroux84 application." });
 });
+
+const { cloudinary } = require('utils/cloudinary.js');
+app.post('/upload', async (req, res) => {
+    try {
+        const fileStr = req.body.data;
+        const uploadResponse = await cloudinary.uploader.upload(fileStr, {
+            upload_preset: 'dev_setups',
+        });
+        console.log(uploadResponse);
+        res.json({ msg: 'yaya' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ err: 'Something went wrong' });
+    }
+});
+
 require("./app/routes/tutorial.routes")(app);
 const PORT = process.env.PORT || 5000
 
