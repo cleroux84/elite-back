@@ -36,10 +36,7 @@ module.exports = app => {
         issuer: `https://${authConfig.domain}/`,
         algorithms: ["RS256"]
     });
-    // let upload = multer({ storage: storage})
-    let uploadFile = multer()
-    const cloudinary = require('cloudinary').v2;
-    const streamifier = require('streamifier');
+    let upload = multer({ storage: storage})
 
     // var router = require("express").Router();
 //CRUD Articles
@@ -70,30 +67,11 @@ module.exports = app => {
         })
     })
 
-    app.post('/upload', upload.single("file"), (req, res, next) => {
-        let streamUpload = (req) => {
-            return new Promise((resolve, reject) => {
-                let stream = cloudinary.uploader.upload_stream(
-                    (error, result) => {
-                        if(result) {
-                            resolve(result);
-                        } else {
-                            reject(error)
-                        }
-                    }
-                );
-                streamifier.createReadStream(req.file.buffer).pipe(stream);
-            });
-        };
-        async function upload(req) {
-            let result = await streamUpload(req);
-            console.log(result);
-        }
-        upload(req);
-      /*  console.log(req.file)
+    app.post('/upload', upload.single("file"), (req, res) => {
+        console.log(req.file)
         const { filename: file} = req.file
-        res.redirect("/")*/
-    });
+        res.redirect("/")
+    })
 
     // app.use('/api/articles', router);
 }
