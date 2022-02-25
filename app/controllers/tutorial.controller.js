@@ -31,8 +31,13 @@ exports.findAll = (req, res) => {
     // const title = req.query.title;
     // var condition = title ? { title: { [Op.like]: `%${title}`}} : null;
 
-    Articles.findAll()
+    Articles.findAll({
+        order: [
+            ['id', 'DESC']
+        ],
+    })
         .then(data => {
+
             res.send(data);
         })
         .catch(err => {
