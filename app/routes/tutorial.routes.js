@@ -56,6 +56,7 @@ module.exports = app => {
     app.delete("/api/appointment/:id", checkJwt, appointment.delete);
     app.put("/api/appointment/:id",checkJwt, appointment.update);
 
+    //TODO a refacto
     const cloudinary = require('cloudinary').v2
     require('dotenv').config();
     cloudinary.config({
@@ -66,7 +67,7 @@ module.exports = app => {
 
     app.post("/upload", upload.single('file'), async (req, res) => {
         try{
-            await cloudinary.uploader.upload("https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg").then(response => {
+            const result = await cloudinary.uploader.upload(req.file.path).then(response => {
                 res.send({
                     message: response.secure_url
                 })
