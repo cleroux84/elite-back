@@ -15,7 +15,7 @@ module.exports = app => {
 
     const storage = multer.diskStorage({
         destination: function (req, file, cb) {
-            cb(null, './uploads/')
+            cb(null, 'uploads/')
         },
         filename: function(req, file, cb) {
             cb(null, file.originalname)
@@ -65,9 +65,9 @@ module.exports = app => {
         api_secret: process.env.CLOUDINARY_API_SECRET,
     });
 
-    app.post("/upload", upload.single('file'), (req, res) => {
+    app.post("/upload", upload.single('file'), async (req, res) => {
         try{
-            cloudinary.uploader.upload(req.file.path).then(response => {
+            const result = await cloudinary.uploader.upload(req.file.path).then(response => {
                 res.send({
                     message: response.secure_url
                 })
