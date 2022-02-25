@@ -65,9 +65,9 @@ module.exports = app => {
         api_secret: process.env.CLOUDINARY_API_SECRET,
     });
 
-    app.post("/upload", upload.single('file'), async (req, res) => {
+    app.post("/upload", upload.single('file'), (req, res) => {
         try{
-            const result = await cloudinary.uploader.upload(req.file.path).then(response => {
+            cloudinary.uploader.upload(req.file.path).then(response => {
                 res.send({
                     message: response.secure_url
                 })
