@@ -56,22 +56,31 @@ module.exports = app => {
     app.delete("/api/appointment/:id", checkJwt, appointment.delete);
     app.put("/api/appointment/:id",checkJwt, appointment.update);
 
-//gestion des images
-    app.get('/file/:name', function (req, res, next) {
-        const options = {
-            root: path.join(__dirname, '../../uploads/')
-        };
-        const fileName = req.params.name;
-        res.sendFile(fileName, options, function (err) {
-            if (err) {next (err)} else {console.log('Sent:', fileName)}
-        })
+    const cloudinary = require('cloudinary').v2
+    require('dotenv').config();
+    cloudinary.config({
+        cloud_name: process.env.CLOUDINADRY_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+    });
+
+    app.post("/upload", upload.single('file'), async (req, res) => {
+        try{
+            await cloudinary.uploader.upload(req.file.path).then(response => {
+                res.send({
+                    message: response.secure_url
+                })
+            })
+        } catch (err) {
+            console.log(err)
+        }
     })
 
-    app.post('/upload', upload.single("file"), (req, res) => {
+    /*app.post('/upload', upload.single("file"), (req, res) => {
         console.log(req.file)
         const { filename: file} = req.file
         res.redirect("/")
-    })
+    })*/
 
     // app.use('/api/articles', router);
 }
