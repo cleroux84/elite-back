@@ -66,7 +66,7 @@ module.exports = app => {
 
     app.post("/upload", upload.single('file'), async (req, res) => {
         try{
-            await cloudinary.uploader.upload(req.file.path).then(response => {
+            await cloudinary.uploader.upload("https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg").then(response => {
                 res.send({
                     message: response.secure_url
                 })
