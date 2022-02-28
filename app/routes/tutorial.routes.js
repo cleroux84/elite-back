@@ -25,29 +25,25 @@ module.exports = app => {
         cloudinary: cloudinary,
         params: {
             folder: 'dev_setups',
-            destination: function (req, file, cb) {
-                cb(null, './uploads/')
-            },
-            filename: function(req, file, cb) {
-                cb(null, file.originalname)
-            }
+            format: async (req, file) => 'png', // supports promises as well
+            public_id: (req, file) => 'computed-filename-using-request',
         },
     });
     const parser = multer({storage: storage})
 
-    app.post('/api/upload', parser.single('file'), async (req, res) => {
-        try{
-            const result = await cloudinary.uploader.upload(req.file.path, {
-                upload_preset: 'dev_setups'
-            }).then(response => {
-                res.send({
-                    message: response.secure_url
-                })
-            })
-        } catch (err) {
-            console.log(err)
-        }
+    app.post('/api/upload', parser.single('file'), function (req, res) {
+        res.json(req.file)
+        console.log(req.file)
     })
+
+    // const storage = multer.diskStorage({
+    //     destination: function (req, file, cb) {
+    //         cb(null, './uploads/')
+    //     },
+    //     filename: function(req, file, cb) {
+    //         cb(null, file.originalname)
+    //     }
+    // });
 
     const checkJwt = jwt({
         // Provide a signing key based on the key identifier in the header and the signing keys provided by your Auth0 JWKS endpoint.
