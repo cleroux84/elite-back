@@ -1,6 +1,7 @@
 const path = require("path");
 const jwt = require("express-jwt");
 const jwksRsa = require("jwks-rsa");
+const {v2: cloudinary} = require("cloudinary");
 //auth0 API
 const authConfig = {
     domain: "dev-nrug8pbx.us.auth0.com",
@@ -64,12 +65,26 @@ module.exports = app => {
         api_key: process.env.CLOUDINARY_API_KEY,
         api_secret: process.env.CLOUDINARY_API_SECRET,
     });
+    const signuploadwidget = () => {
+        const timestamp = Math.round((new Date).getTime()/1000);
+
+        const signature = cloudinary.utils.api_sign_request({
+            timestamp: timestamp,
+            source: 'uw',
+            folder: 'signed_upload_demo_uw'}, apiSecret);
+
+        return { timestamp, signature }
+    }
+    const apiSecret = cloudinary.config().api_secret;
 
     app.post("/upload", upload.single('file'), async (req, res) => {
         try{
             const result = await cloudinary.uploader.upload(req.file.path, {
                 upload_preset: 'dev_setups'
             }).then(response => {
+                cloudinary.utils.api_sign_request(signuploadwidget(), apiSecret);
+                console.log( cloudinary.utils.api_sign_request(signuploadwidget(), apiSecret))
+                console.log(response)
                 res.send({
                     message: response.secure_url
                 })
