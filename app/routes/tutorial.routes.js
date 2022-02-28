@@ -6,12 +6,36 @@ const authConfig = {
     domain: "dev-nrug8pbx.us.auth0.com",
     audience: "https://elite-coaching-api.com"
 };
+const articles = require("../controllers/tutorial.controller");
+const admin = require('../controllers/admin.controller');
+const appointment = require('../controllers/appointment.controller');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const multer = require('multer');
+require('dotenv').config();
 
 module.exports = app => {
-    const articles = require("../controllers/tutorial.controller");
-    const admin = require('../controllers/admin.controller');
-    const appointment = require('../controllers/appointment.controller');
-    const multer = require("multer");
+    cloudinary.config({
+        cloud_name: process.env.CLOUDINADRY_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+    });
+
+    const storage = new CloudinaryStorage({
+        cloudinary: cloudinary,
+        params: {
+            folder: 'dev_setups',
+            format: async (req, file) => 'png', // supports promises as well
+            public_id: (req, file) => 'computed-filename-using-request',
+        },
+    });
+    const parser = multer({storage: storage})
+
+    app.post('/upload', parser.single('file'), function (req, res) {
+        res.json(req.file)
+        console.log(req.file)
+    })
+    // const multer = require("multer");
 
     // const storage = multer.diskStorage({
     //     destination: function (req, file, cb) {
