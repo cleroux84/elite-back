@@ -22,7 +22,7 @@ module.exports = app => {
     const storage = new CloudinaryStorage({
         cloudinary: cloudinary,
         params: {
-            folder: 'dev_setups',
+            folder: 'elite42',
             format: async (req, file) => 'png', // supports promises as well
             public_id: (req, file) => file.originalname,
         },
