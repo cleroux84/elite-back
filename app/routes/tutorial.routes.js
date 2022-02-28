@@ -26,7 +26,7 @@ module.exports = app => {
         params: {
             folder: 'dev_setups',
             format: async (req, file) => 'png', // supports promises as well
-            public_id: (req, file) => 'computed-filename-using-request',
+            public_id: (req, file) => file.originalname,
         },
     });
     const parser = multer({storage: storage})
