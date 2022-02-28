@@ -1,7 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const multer = require('multer');
 const app = express();
 
 const corsOptions = {
@@ -15,6 +17,39 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // app.use("./uploads", express.static(__dirname + './uploads'));
+
+require('dotenv').config();
+cloudinary.config({
+    cloud_name: process.env.CLOUDINADRY_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    // params: {
+    //     destination: function (req, file, cb) {
+    //         cb(null, './uploads/')
+    //     },
+    //     filename: function(req, file, cb) {
+    //         cb(null, file.originalname)
+    //     }
+    // }
+})
+const parser = multer({storage})
+app.post("/upload", parser.single('file'), async (req, res) => {
+    try{
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            upload_preset: 'dev_setups'
+        }).then(response => {
+            res.send({
+                message: response.secure_url
+            })
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
 
 const db = require("./app/models");
 //drop the table if already exists

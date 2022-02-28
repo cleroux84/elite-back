@@ -56,38 +56,27 @@ module.exports = app => {
     app.delete("/api/appointment/:id", checkJwt, appointment.delete);
     app.put("/api/appointment/:id",checkJwt, appointment.update);
 
-    //TODO a refacto
-    const cloudinary = require('cloudinary').v2
-    require('dotenv').config();
-    const { CloudinaryStorage } = require('multer-storage-cloudinary');
-    cloudinary.config({
-        cloud_name: process.env.CLOUDINADRY_NAME,
-        api_key: process.env.CLOUDINARY_API_KEY,
-        api_secret: process.env.CLOUDINARY_API_SECRET,
-    });
-    const storage = new CloudinaryStorage({
-        cloudinary: cloudinary,
-        destination: function (req, file, cb) {
-            cb(null, './uploads/')
-        },
-        filename: function(req, file, cb) {
-            cb(null, file.originalname)
-        }
-    });
-    const parser = multer({ storage: storage });
-    app.post("/upload", parser.single('file'), async (req, res) => {
-        try{
-            const result = await cloudinary.uploader.upload(req.file.path, {
-                upload_preset: 'dev_setups'
-            }).then(response => {
-                res.send({
-                    message: response.secure_url
-                })
-            })
-        } catch (err) {
-            console.log(err)
-        }
-    })
+    // const cloudinary = require('cloudinary').v2
+    // require('dotenv').config();
+    // cloudinary.config({
+    //     cloud_name: process.env.CLOUDINADRY_NAME,
+    //     api_key: process.env.CLOUDINARY_API_KEY,
+    //     api_secret: process.env.CLOUDINARY_API_SECRET,
+    // });
+
+    // app.post("/upload", upload.single('file'), async (req, res) => {
+    //     try{
+    //         const result = await cloudinary.uploader.upload(req.file.path, {
+    //             upload_preset: 'dev_setups'
+    //         }).then(response => {
+    //             res.send({
+    //                 message: response.secure_url
+    //             })
+    //         })
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
+    // })
 
     /*app.post('/upload', upload.single("file"), (req, res) => {
         console.log(req.file)
