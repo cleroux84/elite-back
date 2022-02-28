@@ -3,7 +3,7 @@ const jwt = require("express-jwt");
 const jwksRsa = require("jwks-rsa");
 //auth0 API
 
-const articles = require("../controllers/tutorial.controller");
+const articles = require("../controllers/articles.controller");
 const admin = require('../controllers/admin.controller');
 const appointment = require('../controllers/appointment.controller');
 const cloudinary = require('cloudinary').v2;

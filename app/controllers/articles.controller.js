@@ -102,7 +102,7 @@ exports.delete = (req, res) => {
             });
         });
 };
-// Delete all Tutorials from the database.
+// Delete all Articles from the database.
 exports.deleteAll = (req, res) => {
     Articles.destroy({
         where: {},

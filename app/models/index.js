@@ -16,7 +16,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.articles = require("./tutorial.model.js")(sequelize, Sequelize);
+db.articles = require("./articles.js")(sequelize, Sequelize);
 db.admins = require("./admin.js")(sequelize, Sequelize);
 db.appointments = require("./appointment.js")(sequelize, Sequelize)
 
