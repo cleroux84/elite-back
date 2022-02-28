@@ -1,12 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const path = require('path');
+
 const app = express();
 
 const corsOptions = {
-    // origin: "http://localhost:8081"
-    origin: "https://preprodelitecoaching42.herokuapp.com"
+    origin: "http://localhost:8081"
+    // origin: "https://preprodelitecoaching42.herokuapp.com"
 };
 app.use(cors(corsOptions));
 // parse requests of content-type - application/json
@@ -14,12 +14,8 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("./uploads", express.static(__dirname + './uploads'));
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+// app.use("./uploads", express.static(__dirname + './uploads'));
+
 const db = require("./app/models");
 //drop the table if already exists
 // db.sequelize.sync({ force: true }).then(() => {

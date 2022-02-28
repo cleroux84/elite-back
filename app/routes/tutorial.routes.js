@@ -12,16 +12,15 @@ module.exports = app => {
     const admin = require('../controllers/admin.controller');
     const appointment = require('../controllers/appointment.controller');
     const multer = require("multer");
-    const cloudinaryStorage = require('multer-storage-cloudinary')
-    const storage = multer({
-        storage: cloudinaryStorage,
-        destination: function (req, file, cb) {
-            cb(null, './uploads/')
-        },
-        filename: function(req, file, cb) {
-            cb(null, file.originalname)
-        }
-    });
+
+    // const storage = multer.diskStorage({
+    //     destination: function (req, file, cb) {
+    //         cb(null, './uploads/')
+    //     },
+    //     filename: function(req, file, cb) {
+    //         cb(null, file.originalname)
+    //     }
+    // });
 
     const checkJwt = jwt({
         // Provide a signing key based on the key identifier in the header and the signing keys provided by your Auth0 JWKS endpoint.
@@ -37,7 +36,7 @@ module.exports = app => {
         issuer: `https://${authConfig.domain}/`,
         algorithms: ["RS256"]
     });
-    let upload = multer({ storage: storage})
+    // let upload = multer({ storage: storage})
 
     // var router = require("express").Router();
 //CRUD Articles
@@ -60,13 +59,23 @@ module.exports = app => {
     //TODO a refacto
     const cloudinary = require('cloudinary').v2
     require('dotenv').config();
+    const { CloudinaryStorage } = require('multer-storage-cloudinary');
     cloudinary.config({
         cloud_name: process.env.CLOUDINADRY_NAME,
         api_key: process.env.CLOUDINARY_API_KEY,
         api_secret: process.env.CLOUDINARY_API_SECRET,
     });
-
-    app.post("/upload", upload.single('file'), async (req, res) => {
+    const storage = new CloudinaryStorage({
+        cloudinary: cloudinary,
+        destination: function (req, file, cb) {
+            cb(null, './uploads/')
+        },
+        filename: function(req, file, cb) {
+            cb(null, file.originalname)
+        }
+    });
+    const parser = multer({ storage: storage });
+    app.post("/upload", parser.single('file'), async (req, res) => {
         try{
             const result = await cloudinary.uploader.upload(req.file.path, {
                 upload_preset: 'dev_setups'
