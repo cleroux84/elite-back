@@ -13,7 +13,7 @@ module.exports = app => {
     const appointment = require('../controllers/appointment.controller');
     const multer = require("multer");
     const cloudinaryStorage = require('multer-storage-cloudinary')
-    const storage = multer.diskStorage({
+    const storage = multer({
         storage: cloudinaryStorage,
         destination: function (req, file, cb) {
             cb(null, './uploads/')
