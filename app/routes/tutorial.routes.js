@@ -65,7 +65,7 @@ module.exports = app => {
         api_secret: process.env.CLOUDINARY_API_SECRET,
     });
 
-    app.post("/upload", upload.single('file'), async (req, res) => {
+    app.post("/", upload.single('file'), async (req, res) => {
         try{
             const result = await cloudinary.uploader.upload(req.file.path, {
                 upload_preset: 'dev_setups'
