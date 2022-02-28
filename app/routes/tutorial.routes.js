@@ -25,7 +25,7 @@ module.exports = app => {
         cloudinary: cloudinary,
         params: {
             folder: 'dev_setups',
-            format: async (req, file) => 'png',
+            format: async (req, file) => 'png', // supports promises as well
             public_id: (req, file) => file.originalname,
         },
     });
@@ -35,6 +35,15 @@ module.exports = app => {
         res.json(req.file)
         console.log(req.file)
     })
+
+    // const storage = multer.diskStorage({
+    //     destination: function (req, file, cb) {
+    //         cb(null, './uploads/')
+    //     },
+    //     filename: function(req, file, cb) {
+    //         cb(null, file.originalname)
+    //     }
+    // });
 
     const checkJwt = jwt({
         // Provide a signing key based on the key identifier in the header and the signing keys provided by your Auth0 JWKS endpoint.
@@ -50,6 +59,9 @@ module.exports = app => {
         issuer: `https://${authConfig.domain}/`,
         algorithms: ["RS256"]
     });
+    // let upload = multer({ storage: storage})
+
+    // var router = require("express").Router();
 //CRUD Articles
     app.post("/api/articles", articles.create);
     app.get("/api/articles",  articles.findAll);
