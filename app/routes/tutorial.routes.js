@@ -1,12 +1,10 @@
 const path = require("path");
 const jwt = require("express-jwt");
 const jwksRsa = require("jwks-rsa");
-const Process = require("process");
-
 //auth0 API
 const authConfig = {
-    domain: Process.env.AUTH_DOMAIN,
-    audience: Process.env.AUTH_AUDIENCE
+    domain: "dev-nrug8pbx.us.auth0.com",
+    audience: "https://elite-coaching-api.com"
 };
 const articles = require("../controllers/tutorial.controller");
 const admin = require('../controllers/admin.controller');
@@ -17,6 +15,26 @@ const multer = require('multer');
 require('dotenv').config();
 
 module.exports = app => {
+    cloudinary.config({
+        cloud_name: process.env.CLOUDINADRY_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+    });
+
+    const storage = new CloudinaryStorage({
+        cloudinary: cloudinary,
+        params: {
+            folder: 'dev_setups',
+            format: async (req, file) => 'png',
+            public_id: (req, file) => file.originalname,
+        },
+    });
+    const parser = multer({storage: storage})
+
+    app.post('/api/upload', parser.single('file'), function (req, res) {
+        res.json(req.file)
+        console.log(req.file)
+    })
 
     const checkJwt = jwt({
         // Provide a signing key based on the key identifier in the header and the signing keys provided by your Auth0 JWKS endpoint.
@@ -48,27 +66,34 @@ module.exports = app => {
     app.get("/api/appointment/:id", checkJwt, appointment.findOne);
     app.delete("/api/appointment/:id", checkJwt, appointment.delete);
     app.put("/api/appointment/:id",checkJwt, appointment.update);
+
+    // const cloudinary = require('cloudinary').v2
+    // require('dotenv').config();
+    // cloudinary.config({
+    //     cloud_name: process.env.CLOUDINADRY_NAME,
+    //     api_key: process.env.CLOUDINARY_API_KEY,
+    //     api_secret: process.env.CLOUDINARY_API_SECRET,
+    // });
+
+    // app.post("/upload", upload.single('file'), async (req, res) => {
+    //     try{
+    //         const result = await cloudinary.uploader.upload(req.file.path, {
+    //             upload_preset: 'dev_setups'
+    //         }).then(response => {
+    //             res.send({
+    //                 message: response.secure_url
+    //             })
+    //         })
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
+    // })
+
+    /*app.post('/upload', upload.single("file"), (req, res) => {
+        console.log(req.file)
+        const { filename: file} = req.file
+        res.redirect("/")
+    })*/
+
+    // app.use('/api/articles', router);
 }
-
-//Upload cloudinary
-
-cloudinary.config({
-    cloud_name: process.env.CLOUDINADRY_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-        folder: 'dev_setups',
-        format: async (req, file) => 'png',
-        public_id: (req, file) => file.originalname,
-    },
-});
-const parser = multer({storage: storage})
-
-app.post('/api/upload', parser.single('file'), function (req, res) {
-    res.json(req.file)
-    console.log(req.file)
-})
