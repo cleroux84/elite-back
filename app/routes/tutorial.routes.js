@@ -16,9 +16,9 @@ require('dotenv').config();
 
 module.exports = app => {
     cloudinary.config({
-        cloud_name: process.env.CLOUDINADRY_NAME,
-        api_key: process.env.CLOUDINARY_API_KEY,
-        api_secret: process.env.CLOUDINARY_API_SECRET,
+        cloud_name: "hghzq1rcq",
+        api_key: "393961743377671",
+        api_secret: "hjTBFcQqfCu1m0O6pYiS1V0_Xq8",
     });
 
     const storage = new CloudinaryStorage({
@@ -36,15 +36,6 @@ module.exports = app => {
         console.log(req.file)
     })
 
-    // const storage = multer.diskStorage({
-    //     destination: function (req, file, cb) {
-    //         cb(null, './uploads/')
-    //     },
-    //     filename: function(req, file, cb) {
-    //         cb(null, file.originalname)
-    //     }
-    // });
-
     const checkJwt = jwt({
         // Provide a signing key based on the key identifier in the header and the signing keys provided by your Auth0 JWKS endpoint.
         secret: jwksRsa.expressJwtSecret({
@@ -59,9 +50,7 @@ module.exports = app => {
         issuer: `https://${authConfig.domain}/`,
         algorithms: ["RS256"]
     });
-    // let upload = multer({ storage: storage})
 
-    // var router = require("express").Router();
 //CRUD Articles
     app.post("/api/articles", articles.create);
     app.get("/api/articles",  articles.findAll);
@@ -78,34 +67,6 @@ module.exports = app => {
     app.get("/api/appointment/:id", checkJwt, appointment.findOne);
     app.delete("/api/appointment/:id", checkJwt, appointment.delete);
     app.put("/api/appointment/:id",checkJwt, appointment.update);
-
-    // const cloudinary = require('cloudinary').v2
-    // require('dotenv').config();
-    // cloudinary.config({
-    //     cloud_name: process.env.CLOUDINADRY_NAME,
-    //     api_key: process.env.CLOUDINARY_API_KEY,
-    //     api_secret: process.env.CLOUDINARY_API_SECRET,
-    // });
-
-    // app.post("/upload", upload.single('file'), async (req, res) => {
-    //     try{
-    //         const result = await cloudinary.uploader.upload(req.file.path, {
-    //             upload_preset: 'dev_setups'
-    //         }).then(response => {
-    //             res.send({
-    //                 message: response.secure_url
-    //             })
-    //         })
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-    // })
-
-    /*app.post('/upload', upload.single("file"), (req, res) => {
-        console.log(req.file)
-        const { filename: file} = req.file
-        res.redirect("/")
-    })*/
 
     // app.use('/api/articles', router);
 }
