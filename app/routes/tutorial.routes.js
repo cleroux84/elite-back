@@ -12,8 +12,9 @@ module.exports = app => {
     const admin = require('../controllers/admin.controller');
     const appointment = require('../controllers/appointment.controller');
     const multer = require("multer");
-
+    const cloudinaryStorage = require('multer-storage-cloudinary')
     const storage = multer.diskStorage({
+        storage: cloudinaryStorage,
         destination: function (req, file, cb) {
             cb(null, './uploads/')
         },
@@ -65,7 +66,7 @@ module.exports = app => {
         api_secret: process.env.CLOUDINARY_API_SECRET,
     });
 
-    app.post("/", upload.single('file'), async (req, res) => {
+    app.post("/upload", upload.single('file'), async (req, res) => {
         try{
             const result = await cloudinary.uploader.upload(req.file.path, {
                 upload_preset: 'dev_setups'
