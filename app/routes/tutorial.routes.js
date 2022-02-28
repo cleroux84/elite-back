@@ -31,7 +31,7 @@ module.exports = app => {
     });
     const parser = multer({storage: storage})
 
-    app.post('/upload', parser.single('file'), function (req, res) {
+    app.post('/api/upload', parser.single('file'), function (req, res) {
         res.json(req.file)
         console.log(req.file)
     })
