@@ -3,10 +3,10 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const app = express();
-
+const Process = require("process");
+require('dotenv').config();
 const corsOptions = {
-    // origin: "http://localhost:8081"
-    origin: "https://preprodelitecoaching42.herokuapp.com"
+    origin: Process.env.CORS_OPTIONS
 };
 app.use(cors(corsOptions));
 // parse requests of content-type - application/json
